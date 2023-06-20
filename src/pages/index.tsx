@@ -5,12 +5,12 @@ import { COUNTRY_LIST } from '../../DATA/COUNTRY_LIST';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+export default function Home({countryList} : any) {
 	// *****
 	// TODO:
 	// 1. please change how to get the countryList data using Static Side Generation (SSG) from "/api/resort/countries"
 
-	const countryList = COUNTRY_LIST;
+	// const countryList = COUNTRY_LIST;
 
 	// *****
 
@@ -20,4 +20,16 @@ export default function Home() {
 			<Places countryList={countryList} />
 		</main>
 	);
+}
+
+export async function getStaticProps() {
+	const res = await fetch('https://the-best-resort.vercel.app/api/resort/countries')
+	const data = await res.json()
+
+	return {
+		props: {
+			countryList : data,
+		},
+		revalidate: 60
+	}
 }

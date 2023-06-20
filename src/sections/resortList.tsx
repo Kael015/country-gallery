@@ -2,6 +2,15 @@ import Link from 'next/link';
 import { RESORT_LIST } from '../../DATA/RESORT_LIST';
 import { Sidebar } from './sidebar';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { log } from 'console';
+
+const getResortList = async ( url:string ) => {
+	const res = await fetch(url);
+	const data = await res.json();
+	return data;
+}
 
 export const ResortList = () => {
 	// *****
@@ -9,9 +18,23 @@ export const ResortList = () => {
 	// 1. please change how to get the data using client-side fetching from "/api/resort/list"
 	// 2. check if the country parameter and filter the data accordingly
 
-	const data = RESORT_LIST;
+	// const data = RESORT_LIST;
 
 	// *****
+
+	const router = useRouter();
+	const country = router.query.country
+	console.log(country);
+	
+
+	const { data, error, isLoading } = useSWR<any>(
+		() => '/api/resort/list' + (country ? `?country=${country}` : ''),
+		getResortList
+	)
+
+	if (isLoading) return <p>Loading....</p>
+	if (error) return <p>Something went wrong</p>
+
 	return (
 		<section className="p-8 flex gap-16 justify-between">
 			<div className="flex-1">
