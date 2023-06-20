@@ -42,7 +42,7 @@ export const ResortList = () => {
 					Resort List
 				</h1>
 				<div className="flex flex-col gap-12 w-fit">
-					{data.map((resort) => (
+					{data?.map((resort: any) => (
 						<Link
 							key={resort.slug}
 							className="flex gap-32 text-xl shadow-lg items-center justify-between p-8 rounded-sm hover:bg-slate-200 transition-all"
